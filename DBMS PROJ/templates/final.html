@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th, td {
+    border: 1px solid black;
+    padding: 8px; 
+    text-align: left;
+  }
+  .jumbotron{
+            margin-bottom: 20px;
+  }
+  
+</style>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FDA Drug Test Analysis</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="jumbotron">
+        <h1>FDA Drug Test Analysis</h1>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="file">Choose File:</label>
+                <input type="file" name="file" id="file" accept=".xlsx, .xls" required>
+            </div>
+            
+            <button type="submit">Submit</button>
+            </div>
+        </form>
+   </div>
+   <div class="jumbotron">
+   <h1>File Upload and Processing Result</h1>
+    <p>{{ message }}</p>
+   <h1>Select Drug</h1>
+
+   <form method="POST" action="/select_drug">
+       
+       <label for="selected_drug1">Select Target Values:</label>
+           <input type="text" name="selected_drug1" id="selected_drug1" list="valuesList">
+           <datalist id="valuesList">
+               {% for value in unique_drugs %}
+                   <option value="{{ value }}">
+               {% endfor %}
+           </datalist>
+       <label for="selected_drug2">Select Target Values:</label>
+           <input type="text" name="selected_drug2" id="selected_drug2" list="valuesList">
+           <datalist id="valuesList">
+               {% for value in unique_drugs %}
+                   <option value="{{ value }}">
+               {% endfor %}
+           </datalist>
+        <label for="selected_drug3">Select Target Values:</label>
+            <input type="text" name="selected_drug3" id="selected_drug3" list="valuesList">
+            <datalist id="valuesList">
+                {% for value in unique_drugs %}
+                    <option value="{{ value }}">
+                {% endfor %}
+            </datalist>
+       <button type="submit">Get Results</button>
+       </div>
+   </form>
+   <div class="jumbotron">
+       <h1>Result for the Selected combinations</h1>
+       <p>Selected Drugs Combinations:{{ s1 }}, {{ s2 }},{{ s3 }}</p>
+       {% if count_acute_kidney_injury is not none %}
+           <p>Number of cases with Acute Kidney Injury with Vancomycin: {{ count_acute_kidney_injury }}</p>
+    
+       {% endif %}
+       <table style="width:50%">
+           <tr>
+               <th>Combinations</th>
+               <th>With AKI</th>
+               <th>Without AKI</th>
+           </tr>
+            <tr>
+                <th>Drug Alone</th>
+                {% if count_acute_kidney_injury_vancomycin is not none %}
+                <th>{{ count_acute_kidney_injury_vancomycin }}</th>
+                {% endif %}
+                {% if count_w_o_acute_kidney_injury_vancomycin is not none %}
+                <th>{{ count_w_o_acute_kidney_injury_vancomycin }}</th>
+                {% endif %}
+            </tr>
+            <tr>
+                <th>Drug + Combinations</th>
+                {% if count_acute_kidney_injury_vancomycin_and_others is not none %}
+                <th>{{ count_acute_kidney_injury_vancomycin_and_others }}</th>
+                {% endif %}
+                {% if count_w_o_acute_kidney_injury_vancomycin_and_others is not none %}
+                <th>{{ count_w_o_acute_kidney_injury_vancomycin_and_others }}</th>
+                {% endif %}
+            </tr>
+       </table>
+       {% if reporting_odds_ratio is not none %}
+           <p><b>Reporting Odds Ratio(ROR):</b> {{ reporting_odds_ratio }}</p>
+       {% endif %}
+   </div>
+   <div class="jumbotron">
+   <h1>Result for the association rules</h1>
+    {% if table %}
+        {{ table | safe }}
+    {% else %}
+        <p>No data to display.</p>
+    {% endif %}
+</div>
+
+
+</body>

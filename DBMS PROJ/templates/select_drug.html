@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Drug</title>
+</head>
+<body>
+    <h1>Select Drug</h1>
+
+    <form method="POST" action="/select_drug">
+        <div class="form-group">
+        <label for="selected_drug1">Select Target Values:</label>
+            <input type="text" name="selected_drug1" id="selected_drug1" list="valuesList">
+            <datalist id="valuesList">
+                {% for value in unique_drugs %}
+                    <option value="{{ value }}">
+                {% endfor %}
+            </datalist>
+        <label for="selected_drug2">Select Target Values:</label>
+            <input type="text" name="selected_drug2" id="selected_drug2" list="valuesList">
+            <datalist id="valuesList">
+                {% for value in unique_drugs %}
+                    <option value="{{ value }}">
+                {% endfor %}
+            </datalist>
+        </div>
+
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
